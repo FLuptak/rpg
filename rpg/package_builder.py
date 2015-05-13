@@ -1,6 +1,7 @@
 from os.path import expanduser
 from subprocess import call, check_output, PIPE, Popen, STDOUT
 from rpg.utils import copy_file
+from rpg.command import Command
 
 
 class PackageBuilder:
@@ -26,7 +27,7 @@ class PackageBuilder:
         user_home = expanduser("~")
         copy_file(str(spec_file), user_home + "/rpmbuild/SPECS/")
         copy_file(str(tarball), user_home + "/rpmbuild/SOURCES/")
-        output = Command("rpmbuild", "-bs", user_home + "/rpmbuild/SPECS/" 
+        output = Command("rpmbuild -bs " + user_home + "/rpmbuild/SPECS/" 
             + spec_file.name).execute()
         srpm_path = self._get_last_word(output)
         Command("mv", srpm_path, srpm_output_path).execute()
